@@ -13,6 +13,17 @@
 		11573C5B27C2CBC90009DA6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11573C5927C2CBC90009DA6A /* Main.storyboard */; };
 		11573C5D27C2CBCD0009DA6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11573C5C27C2CBCD0009DA6A /* Assets.xcassets */; };
 		11573C6027C2CBCD0009DA6A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11573C5E27C2CBCD0009DA6A /* LaunchScreen.storyboard */; };
+		11573C6E27C2CF180009DA6A /* ACDC_Thunderstruck.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C6D27C2CF180009DA6A /* ACDC_Thunderstruck.mp3 */; };
+		11573C7227C2D0330009DA6A /* ACDC_ShootToThrill.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C7127C2D0330009DA6A /* ACDC_ShootToThrill.mp3 */; };
+		11573C7427C2D10E0009DA6A /* SoundTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11573C7327C2D10E0009DA6A /* SoundTrack.swift */; };
+		11573C7D27C2D2F70009DA6A /* LinkinPark_InTheEnd.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C7527C2D2F60009DA6A /* LinkinPark_InTheEnd.mp3 */; };
+		11573C7E27C2D2F70009DA6A /* LedZeppelin_ImmigrantSong.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C7627C2D2F60009DA6A /* LedZeppelin_ImmigrantSong.mp3 */; };
+		11573C7F27C2D2F70009DA6A /* SamuelKin_SpiderVerseTheme.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C7727C2D2F60009DA6A /* SamuelKin_SpiderVerseTheme.mp3 */; };
+		11573C8027C2D2F70009DA6A /* Blur_Song2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C7827C2D2F60009DA6A /* Blur_Song2.mp3 */; };
+		11573C8127C2D2F70009DA6A /* Sandstorm_AlexChristensenAndTheBerlinOrchestra.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C7927C2D2F70009DA6A /* Sandstorm_AlexChristensenAndTheBerlinOrchestra.mp3 */; };
+		11573C8227C2D2F70009DA6A /* BenE.King_StandByMe.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C7A27C2D2F70009DA6A /* BenE.King_StandByMe.mp3 */; };
+		11573C8327C2D2F70009DA6A /* Eminem_LoseYourself.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C7B27C2D2F70009DA6A /* Eminem_LoseYourself.mp3 */; };
+		11573C8427C2D2F70009DA6A /* Wice_Interstellar.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11573C7C27C2D2F70009DA6A /* Wice_Interstellar.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +35,17 @@
 		11573C5C27C2CBCD0009DA6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11573C5F27C2CBCD0009DA6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		11573C6127C2CBCD0009DA6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		11573C6D27C2CF180009DA6A /* ACDC_Thunderstruck.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ACDC_Thunderstruck.mp3; sourceTree = "<group>"; };
+		11573C7127C2D0330009DA6A /* ACDC_ShootToThrill.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ACDC_ShootToThrill.mp3; sourceTree = "<group>"; };
+		11573C7327C2D10E0009DA6A /* SoundTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundTrack.swift; sourceTree = "<group>"; };
+		11573C7527C2D2F60009DA6A /* LinkinPark_InTheEnd.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = LinkinPark_InTheEnd.mp3; sourceTree = "<group>"; };
+		11573C7627C2D2F60009DA6A /* LedZeppelin_ImmigrantSong.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = LedZeppelin_ImmigrantSong.mp3; sourceTree = "<group>"; };
+		11573C7727C2D2F60009DA6A /* SamuelKin_SpiderVerseTheme.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = SamuelKin_SpiderVerseTheme.mp3; sourceTree = "<group>"; };
+		11573C7827C2D2F60009DA6A /* Blur_Song2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Blur_Song2.mp3; sourceTree = "<group>"; };
+		11573C7927C2D2F70009DA6A /* Sandstorm_AlexChristensenAndTheBerlinOrchestra.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sandstorm_AlexChristensenAndTheBerlinOrchestra.mp3; sourceTree = "<group>"; };
+		11573C7A27C2D2F70009DA6A /* BenE.King_StandByMe.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BenE.King_StandByMe.mp3; sourceTree = "<group>"; };
+		11573C7B27C2D2F70009DA6A /* Eminem_LoseYourself.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Eminem_LoseYourself.mp3; sourceTree = "<group>"; };
+		11573C7C27C2D2F70009DA6A /* Wice_Interstellar.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Wice_Interstellar.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +85,17 @@
 				11573C5C27C2CBCD0009DA6A /* Assets.xcassets */,
 				11573C5E27C2CBCD0009DA6A /* LaunchScreen.storyboard */,
 				11573C6127C2CBCD0009DA6A /* Info.plist */,
+				11573C6D27C2CF180009DA6A /* ACDC_Thunderstruck.mp3 */,
+				11573C7127C2D0330009DA6A /* ACDC_ShootToThrill.mp3 */,
+				11573C7327C2D10E0009DA6A /* SoundTrack.swift */,
+				11573C7A27C2D2F70009DA6A /* BenE.King_StandByMe.mp3 */,
+				11573C7827C2D2F60009DA6A /* Blur_Song2.mp3 */,
+				11573C7B27C2D2F70009DA6A /* Eminem_LoseYourself.mp3 */,
+				11573C7627C2D2F60009DA6A /* LedZeppelin_ImmigrantSong.mp3 */,
+				11573C7527C2D2F60009DA6A /* LinkinPark_InTheEnd.mp3 */,
+				11573C7927C2D2F70009DA6A /* Sandstorm_AlexChristensenAndTheBerlinOrchestra.mp3 */,
+				11573C7727C2D2F60009DA6A /* SamuelKin_SpiderVerseTheme.mp3 */,
+				11573C7C27C2D2F70009DA6A /* Wice_Interstellar.mp3 */,
 			);
 			path = MusicOn;
 			sourceTree = "<group>";
@@ -125,9 +158,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11573C7F27C2D2F70009DA6A /* SamuelKin_SpiderVerseTheme.mp3 in Resources */,
+				11573C7D27C2D2F70009DA6A /* LinkinPark_InTheEnd.mp3 in Resources */,
+				11573C7E27C2D2F70009DA6A /* LedZeppelin_ImmigrantSong.mp3 in Resources */,
+				11573C8127C2D2F70009DA6A /* Sandstorm_AlexChristensenAndTheBerlinOrchestra.mp3 in Resources */,
+				11573C8027C2D2F70009DA6A /* Blur_Song2.mp3 in Resources */,
+				11573C6E27C2CF180009DA6A /* ACDC_Thunderstruck.mp3 in Resources */,
 				11573C6027C2CBCD0009DA6A /* LaunchScreen.storyboard in Resources */,
+				11573C7227C2D0330009DA6A /* ACDC_ShootToThrill.mp3 in Resources */,
 				11573C5D27C2CBCD0009DA6A /* Assets.xcassets in Resources */,
+				11573C8227C2D2F70009DA6A /* BenE.King_StandByMe.mp3 in Resources */,
 				11573C5B27C2CBC90009DA6A /* Main.storyboard in Resources */,
+				11573C8427C2D2F70009DA6A /* Wice_Interstellar.mp3 in Resources */,
+				11573C8327C2D2F70009DA6A /* Eminem_LoseYourself.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +182,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11573C5827C2CBC90009DA6A /* ViewController.swift in Sources */,
+				11573C7427C2D10E0009DA6A /* SoundTrack.swift in Sources */,
 				11573C5427C2CBC90009DA6A /* AppDelegate.swift in Sources */,
 				11573C5627C2CBC90009DA6A /* SceneDelegate.swift in Sources */,
 			);
