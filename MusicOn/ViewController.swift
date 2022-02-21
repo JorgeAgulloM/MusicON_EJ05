@@ -17,12 +17,21 @@ class ViewController: UIViewController {
     @IBOutlet weak var forwardButtonControl: UIButton!
     @IBOutlet weak var titleLabelSong: UILabel!
     @IBOutlet weak var artistLabelSong: UILabel!
+    @IBOutlet weak var labelDuration: UILabel!
+    @IBOutlet weak var labelCurrentTime: UILabel!
+    @IBOutlet weak var shuffleControl: UIButton!
+    @IBOutlet weak var repeatControl: UIButton!
+    
     
     var player: AVAudioPlayer!
     var playList: Array<SoundTrack> = []
     var soundLoaded: Int = 0
     let minSound: Int = 0
     var maxSound: Int = 0 //playList.count
+    var touchSlider: Bool = false
+    var shuffleSong: Bool = false
+    var repeatSong: Bool = false
+    var randomlist: Array<Int> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,10 +42,17 @@ class ViewController: UIViewController {
         
         //  Timer para actualizar el Slider
         var _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { second in
-            self.updateSlider()
+            if !self.touchSlider { self.updateSlider() }
+            self.updateTimers()
             if self.player.isPlaying {
                 if (self.player.duration - 1) <= self.player.currentTime {
-                    self.nextSound()
+                    if !self.repeatSong {
+                        self.nextSound()
+                        
+                    } else {
+                        self.initPlayer()
+                        self.playPause(true)
+                    }
                 }
             }
         }
@@ -67,7 +83,8 @@ class ViewController: UIViewController {
             artistLabelSong.text = "Unknow"
         }
     }
-    func showPlayPause(_ startStop: Bool) {
+    
+    func playPause(_ startStop: Bool) {
         if startStop {
             sliderControl.maximumValue = Float(player.duration)
             player.play()
@@ -83,26 +100,89 @@ class ViewController: UIViewController {
     }
     
     func nextSound() {
-        if soundLoaded == maxSound {
-            soundLoaded = minSound
+        if shuffleSong {
+            if randomlist.count > 0 {
+                soundLoaded = randomlist[0]
+            } else {
+                generateRandom()
+                soundLoaded = randomlist[0]
+            }
+            randomlist.remove(at: 0)
+            print(randomlist)
         } else {
-            soundLoaded += 1
+            if soundLoaded == maxSound {
+                soundLoaded = minSound
+            } else {
+                soundLoaded += 1
+            }
         }
         initPlayer()
-        showPlayPause(true)
+        playPause(true)
     }
     
-    @IBAction func sliderControl(_ sender: UISlider) {
+    func updateTimers() {
+        labelDuration.text = formatTimers(Int(player.duration))
+        labelCurrentTime.text = formatTimers(Int(player.currentTime))
+    }
+    
+    func formatTimers(_ time: Int) -> String{
+        var value: Int = Int(time)
+        var valueString: String = ""
+        var min: Int = 0
+        var sec: Int = 0
+        
+        
+        repeat {
+            if value >= 60 {
+                min += 1
+                value -= 60
+            } else {
+                sec = value
+                value = 0
+            }
+            
+        } while value > 0
+        
+        if min < 10 {
+            if sec < 10 {
+                valueString = "0\(min):0\(sec)"
+            } else {
+                valueString = "0\(min):\(sec)"
+            }
+        } else {
+            if sec < 10 {
+                valueString = "\(min):0\(sec)"
+            } else {
+                valueString = "\(min):\(sec)"
+            }
+        }
+        
+        return valueString
+    }
+    
+    func generateRandom() {
+        for n in 0..<playList.count {
+            randomlist.append(n)
+        }
+        randomlist.shuffle()
+    }
+    
+    @IBAction func PruebaTouchUpInside(_ sender: UISlider) {
+        touchSlider = false
         player.currentTime = TimeInterval(sliderControl.value)
         player.prepareToPlay()
-        showPlayPause(true)
+        playPause(true)
+    }
+
+    @IBAction func pruebaTouchDown(_ sender: UISlider) {
+        touchSlider = true
     }
     
     @IBAction func playControl(_ sender: UIButton) {
         if player.isPlaying {
-            showPlayPause(false)
+            playPause(false)
         } else {
-            showPlayPause(true)
+            playPause(true)
         }
         
     }
@@ -114,14 +194,38 @@ class ViewController: UIViewController {
             soundLoaded -= 1
         }
         initPlayer()
-        showPlayPause(true)
+        playPause(true)
     }
     
     @IBAction func forwardControl(_ sender: UIButton) {
         nextSound()
     }
     
+    @IBAction func shuffleButtonControl(_ sender: UIButton) {
+        shuffleSong.toggle()
+        if shuffleSong {
+            shuffleControl.tintColor = .green
+            randomlist.removeAll()
+            generateRandom()
+            soundLoaded = randomlist[0]
+            randomlist.remove(at: 0)
+            initPlayer()
+            playPause(true)
+        } else {
+            shuffleControl.tintColor = .gray
+        }
+    }
     
+    @IBAction func repeatoButtonControl(_ sender: UIButton) {
+        repeatSong.toggle()
+        if repeatSong {
+            repeatControl.tintColor = .green
+        } else {
+            repeatControl.tintColor = .gray
+        }
+    }
+    
+   
     
     func loadSoundTracks() {
         playList.append(SoundTrack(url: "ACDC_Thunderstruck", typeOf: "mp3", title: "Thunderstruck", artist: "AC-DC", image: "thunderstruck"))
