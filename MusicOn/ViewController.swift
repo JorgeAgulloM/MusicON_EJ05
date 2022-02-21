@@ -32,73 +32,79 @@ class ViewController: UIViewController {
     var shuffleSong: Bool = false
     var repeatSong: Bool = false
     var randomlist: Array<Int> = []
+    var timer: Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        //  Carga canciones
         loadSoundTracks()
+        
+        //  Carga la plrimera en el reproductor
         initPlayer()
+        
+        // Carga el valor del array de canciones
         maxSound = playList.count - 1
         
-        //  Timer para actualizar el Slider
-        var _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { second in
-            if !self.touchSlider { self.updateSlider() }
-            self.updateTimers()
-            if self.player.isPlaying {
-                if (self.player.duration - 1) <= self.player.currentTime {
-                    if !self.repeatSong {
-                        self.nextSound()
-                        
-                    } else {
-                        self.initPlayer()
-                        self.playPause(true)
-                    }
-                }
-            }
-        }
     }
     
+    //  Carga la canción a reproducir
     func initPlayer() {
         let url = Bundle.main.url(forResource: playList[soundLoaded].url, withExtension: playList[soundLoaded].typeOf)
         player = try? AVAudioPlayer(contentsOf: url!)
         infoPlayer()
     }
     
+    //  Prepara los datos de la canción a reproducir
     func infoPlayer() {
-        if let image = UIImage(named: playList[soundLoaded].image) {
-            imageSong.image = image
-        } else {
-            print("Error al cargar la imagen")
-        }
-        
-        if let title = playList[soundLoaded].title {
-            titleLabelSong.text = title
-        } else {
-            titleLabelSong.text = "Unknow"
-        }
-        
-        if let artist = playList[soundLoaded].artist {
-            artistLabelSong.text = artist
-        } else {
-            artistLabelSong.text = "Unknow"
-        }
+        imageSong.image = playList[soundLoaded].image
+        titleLabelSong.text = playList[soundLoaded].title
+        artistLabelSong.text = playList[soundLoaded].artist
+        updateTimerDurationLabel()
+        updateTimeCurrentLabel()
     }
     
+    //  Función para iniciar o parar la reproducción
     func playPause(_ startStop: Bool) {
         if startStop {
             sliderControl.maximumValue = Float(player.duration)
+            
+            //  Timer para actualizar el Slider
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { second in
+                if self.touchSlider {
+                    self.updateTimeCurrentLabelForSlider()
+                } else {
+                    self.updateSlider()
+                    self.updateTimeCurrentLabel()
+                }
+                
+                if self.player.isPlaying {
+                    if (self.player.duration - 1) <= self.player.currentTime {
+                        if !self.repeatSong {
+                            self.nextSound()
+                            
+                        } else {
+                            self.initPlayer()
+                            self.playPause(true)
+                        }
+                    }
+                }
+            }
+            
             player.play()
             playButton.setImage(UIImage(systemName: "pause"), for: .normal)
         } else {
+            timer.invalidate()
             player.pause()
             playButton.setImage(UIImage(systemName: "play"), for: .normal)
         }
     }
 
+    //  Actualiza el slider
     func updateSlider() {
         sliderControl.value = Float(player.currentTime)
     }
     
+    //  Función para pasar a la siguiente canción. Tiene en cuenta si el shuffle está activo
     func nextSound() {
         if shuffleSong {
             if randomlist.count > 0 {
@@ -109,28 +115,35 @@ class ViewController: UIViewController {
             }
             randomlist.remove(at: 0)
             print(randomlist)
+            
         } else {
-            if soundLoaded == maxSound {
-                soundLoaded = minSound
-            } else {
-                soundLoaded += 1
-            }
+            soundLoaded = soundLoaded == maxSound ? minSound : soundLoaded + 1
+            
         }
+        
         initPlayer()
         playPause(true)
     }
     
-    func updateTimers() {
+    //  Actualiza los timers de reproducción de la pista
+    func updateTimerDurationLabel() {
         labelDuration.text = formatTimers(Int(player.duration))
+    }
+    
+    func updateTimeCurrentLabel() {
         labelCurrentTime.text = formatTimers(Int(player.currentTime))
     }
     
+    func updateTimeCurrentLabelForSlider() {
+        labelCurrentTime.text = formatTimers(Int(sliderControl.value))
+    }
+    
+    //  Da formato a los timers de reproducción de la pista
     func formatTimers(_ time: Int) -> String{
         var value: Int = Int(time)
         var valueString: String = ""
         var min: Int = 0
         var sec: Int = 0
-        
         
         repeat {
             if value >= 60 {
@@ -144,40 +157,43 @@ class ViewController: UIViewController {
         } while value > 0
         
         if min < 10 {
-            if sec < 10 {
-                valueString = "0\(min):0\(sec)"
-            } else {
-                valueString = "0\(min):\(sec)"
-            }
+            valueString = sec < 10 ? "0\(min):0\(sec)" : "0\(min):\(sec)"
         } else {
-            if sec < 10 {
-                valueString = "\(min):0\(sec)"
-            } else {
-                valueString = "\(min):\(sec)"
-            }
+            valueString = sec < 10 ? "\(min):0\(sec)" : "\(min):\(sec)"
         }
         
         return valueString
     }
     
+    //  Genera un array de canciónes shuffle
     func generateRandom() {
         for n in 0..<playList.count {
             randomlist.append(n)
+            
         }
+        
         randomlist.shuffle()
     }
     
-    @IBAction func PruebaTouchUpInside(_ sender: UISlider) {
+    //  Modifica el timeCurrent de la canción al dejar de tocar el Slider
+    @IBAction func sliderTouchUpInside(_ sender: UISlider) {
         touchSlider = false
         player.currentTime = TimeInterval(sliderControl.value)
         player.prepareToPlay()
         playPause(true)
     }
 
-    @IBAction func pruebaTouchDown(_ sender: UISlider) {
+    //  Al pulsar sobre la barra para cambiar el tiempo de reproducción se bloquea la actualización de la canción momentaneamente paa evitar saltos de canción mientra se toca el Slider
+    @IBAction func sliderTouchDown(_ sender: UISlider) {
         touchSlider = true
     }
     
+    //  Acción para cambiar el valor de la label al editar el valor del Slider
+    @IBAction func sliderEditingChanged(_ sender: UISlider) {
+        updateTimeCurrentLabel()
+    }
+    
+    //  Acción para pasar a play, pause o vicebersa
     @IBAction func playControl(_ sender: UIButton) {
         if player.isPlaying {
             playPause(false)
@@ -187,6 +203,7 @@ class ViewController: UIViewController {
         
     }
     
+    //  Acción para ir a la canción anterior
     @IBAction func backwardControl(_ sender: UIButton) {
         if soundLoaded == minSound {
             soundLoaded = maxSound
@@ -197,10 +214,12 @@ class ViewController: UIViewController {
         playPause(true)
     }
     
+    //  Acción para pasar a la siguiente canción
     @IBAction func forwardControl(_ sender: UIButton) {
         nextSound()
     }
     
+    //  Acción para poner la lista a reproducir en modo shuffle
     @IBAction func shuffleButtonControl(_ sender: UIButton) {
         shuffleSong.toggle()
         if shuffleSong {
@@ -209,35 +228,41 @@ class ViewController: UIViewController {
             generateRandom()
             soundLoaded = randomlist[0]
             randomlist.remove(at: 0)
-            initPlayer()
-            playPause(true)
+            if !player.isPlaying {
+                initPlayer()
+                playPause(true)
+            }
+            
         } else {
             shuffleControl.tintColor = .gray
+            
         }
     }
     
-    @IBAction func repeatoButtonControl(_ sender: UIButton) {
+    //  Acción del botón para repetir canción
+    @IBAction func repeatButtonControl(_ sender: UIButton) {
         repeatSong.toggle()
         if repeatSong {
             repeatControl.tintColor = .green
         } else {
             repeatControl.tintColor = .gray
         }
+        
     }
     
-   
-    
+    //  Carga de canciones de la app
     func loadSoundTracks() {
-        playList.append(SoundTrack(url: "ACDC_Thunderstruck", typeOf: "mp3", title: "Thunderstruck", artist: "AC-DC", image: "thunderstruck"))
-        playList.append(SoundTrack(url: "ACDC_ShootToThrill", typeOf: "mp3", title: "Shoot To Thrill", artist: "AC-DC", image: "shootToThrill"))
-        playList.append(SoundTrack(url: "BenE.King_StandByMe", typeOf: "mp3", title: "Stand By Me", artist: "BenE.King", image: "standByMe"))
-        playList.append(SoundTrack(url: "Blur_Song2", typeOf: "mp3", title: "Song 2", artist: "Blur", image: "song2"))
-        playList.append(SoundTrack(url: "Eminem_LoseYourself", typeOf: "mp3", title: "Lose Your self", artist: "Eminem", image: "loseYourSelf"))
-        playList.append(SoundTrack(url: "LedZeppelin_ImmigrantSong", typeOf: "mp3", title: "Immigrant Song", artist: "LedZeppelin", image: "inmigrantSong"))
-        playList.append(SoundTrack(url: "LinkinPark_InTheEnd", typeOf: "mp3", title: "In The End", artist: "LinkinParkC", image: "inTheEnd"))
-        playList.append(SoundTrack(url: "Sandstorm_AlexChristensenAndTheBerlinOrchestra", typeOf: "mp3", title: "Sandstorm", artist: "Alex Christensen And The Berlin Orchestra", image: "sandstorm"))
-        playList.append(SoundTrack(url: "SamuelKin_SpiderVerseTheme", typeOf: "mp3", title: "Spider-Verse Theme", artist: "Samuel Kim", image: "spiderVerse"))
-        playList.append(SoundTrack(url: "Wice_Interstellar", typeOf: "mp3", title: "Interstellar", artist: "Wise", image: "interstellar"))
+        playList.append(SoundTrack(rawName: "ImmigrantSong(Remaster).mp3"))
+        playList.append(SoundTrack(rawName: "Interstellar.mp3"))
+        playList.append(SoundTrack(rawName: "InTheEnd.mp3"))
+        playList.append(SoundTrack(rawName: "LoseYourself.mp3"))
+        playList.append(SoundTrack(rawName: "Sandstorm.mp3"))
+        playList.append(SoundTrack(rawName: "ShootToThrill.mp3"))
+        playList.append(SoundTrack(rawName: "Song2.mp3"))
+        playList.append(SoundTrack(rawName: "Spider-Verse(NoWayHomeTribute).mp3"))
+        playList.append(SoundTrack(rawName: "StandByMe.mp3"))
+        playList.append(SoundTrack(rawName: "Thunderstruck.mp3"))
+    
     }
     
 }
