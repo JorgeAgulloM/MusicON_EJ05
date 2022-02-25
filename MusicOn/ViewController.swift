@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MyCellDelegate {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var imageSong: UIImageView!
     @IBOutlet weak var sliderControl: UISlider!
@@ -128,7 +128,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
             
         }
-        print(soundLoaded)
         initPlayer()
         playPause(true)
     }
@@ -181,7 +180,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         randomlist.shuffle()
-        print(randomlist)
     }
     
     //  Modifica el timeCurrent de la canción al dejar de tocar el Slider
@@ -269,43 +267,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: MyTableViewCell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath) as! MyTableViewCell
 
-        var title: String = ""
-        var artist: String = ""
-        var color: UIColor = UIColor.white
-        var hidden: Bool = true
-        var image: UIImage = UIImage()
-//        if shuffleSong {
-//            title = playList[randomlist[indexPath.row]].title
-//            artist = playList[randomlist[indexPath.row]].artist
-//            hidden =  soundLoaded == randomlist[indexPath.row] ? false : true
-//            color = soundLoaded == randomlist[indexPath.row] ? .green : .white
-//        } else {
-            title = playList[indexPath.row].title
-            artist = playList[indexPath.row].artist
-            hidden = soundLoaded == indexPath.row ? false : true
-            color = soundLoaded == indexPath.row ? .green : .white
-        image = playList[indexPath.row].image
-        //}
-        //speaker.wave.2
+        let title: String = playList[indexPath.row].title
+        let artist: String = playList[indexPath.row].artist
+
         cell.titleCell.text = " \(title)"
         cell.authorCell.text = "   - \(artist)"
-        cell.iconSound.isHidden = hidden
-        cell.titleCell.textColor = color
-        cell.imageSound.image = image
+        cell.iconSound.isHidden = soundLoaded == indexPath.row ? false : true
+        cell.titleCell.textColor = soundLoaded == indexPath.row ? .green : .white
+        cell.imageSound.image = playList[indexPath.row].image
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Celda \(indexPath.row) seleccionada")
         soundLoaded = indexPath.row
         initPlayer()
         playPause(true)
     }
     
-    func callPressed(name: String) {
-        print("Algo")
-    }
     
     //  Carga de canciones de la app
     func loadSoundTracks() {
