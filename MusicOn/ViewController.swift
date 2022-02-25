@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MyCellDelegate {
 
     @IBOutlet weak var imageSong: UIImageView!
     @IBOutlet weak var sliderControl: UISlider!
@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var labelCurrentTime: UILabel!
     @IBOutlet weak var shuffleControl: UIButton!
     @IBOutlet weak var repeatControl: UIButton!
-    
+    @IBOutlet weak var myListPlayer: UITableView!
     
     var player: AVAudioPlayer!
     var playList: Array<SoundTrack> = []
@@ -45,12 +45,16 @@ class ViewController: UIViewController {
         // Carga el valor del array de canciones
         maxSound = playList.count - 1
         
+        //Control de la tabla
+        myListPlayer.delegate = self
+        myListPlayer.dataSource = self
     }
     
     //  Carga la canción a reproducir
     func initPlayer() {
         let url = Bundle.main.url(forResource: playList[soundLoaded].url, withExtension: playList[soundLoaded].typeOf)
         player = try? AVAudioPlayer(contentsOf: url!)
+        myListPlayer.reloadData()
         infoPlayer()
     }
     
@@ -80,7 +84,7 @@ class ViewController: UIViewController {
                 if self.player.isPlaying {
                     if (self.player.duration - 1) <= self.player.currentTime {
                         if !self.repeatSong {
-                            self.nextSound()
+                            self.nextOrBackSound(1)
                             
                         } else {
                             self.initPlayer()
@@ -95,7 +99,7 @@ class ViewController: UIViewController {
         } else {
             timer.invalidate()
             player.pause()
-            playButton.setImage(UIImage(systemName: "play"), for: .normal)
+            playButton.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
         }
     }
 
@@ -104,23 +108,27 @@ class ViewController: UIViewController {
         sliderControl.value = Float(player.currentTime)
     }
     
-    //  Función para pasar a la siguiente canción. Tiene en cuenta si el shuffle está activo
-    func nextSound() {
+    //  Función para pasar a la siguiente o anterior canción. Tiene en cuenta si el shuffle está activo
+    func nextOrBackSound(_ goTo: Int) {
         if shuffleSong {
-            if randomlist.count > 0 {
-                soundLoaded = randomlist[0]
+            let i: Int = randomlist.firstIndex(of: soundLoaded) ?? 0
+
+            if goTo > 0 {
+                soundLoaded = soundLoaded == randomlist[randomlist.count - 1] ? randomlist[0] : randomlist[i + goTo]
             } else {
-                generateRandom()
-                soundLoaded = randomlist[0]
+                soundLoaded = soundLoaded == randomlist[0] ? randomlist[randomlist.count - 1] : randomlist[i + goTo]
+                
             }
-            randomlist.remove(at: 0)
-            print(randomlist)
-            
+        
         } else {
-            soundLoaded = soundLoaded == maxSound ? minSound : soundLoaded + 1
+            if goTo > 0 {
+                soundLoaded = soundLoaded == maxSound ? minSound : soundLoaded + goTo
+            } else {
+                soundLoaded = soundLoaded == minSound ? maxSound : soundLoaded + goTo
+            }
             
         }
-        
+        print(soundLoaded)
         initPlayer()
         playPause(true)
     }
@@ -173,6 +181,7 @@ class ViewController: UIViewController {
         }
         
         randomlist.shuffle()
+        print(randomlist)
     }
     
     //  Modifica el timeCurrent de la canción al dejar de tocar el Slider
@@ -205,18 +214,12 @@ class ViewController: UIViewController {
     
     //  Acción para ir a la canción anterior
     @IBAction func backwardControl(_ sender: UIButton) {
-        if soundLoaded == minSound {
-            soundLoaded = maxSound
-        } else {
-            soundLoaded -= 1
-        }
-        initPlayer()
-        playPause(true)
+        nextOrBackSound(-1)
     }
     
     //  Acción para pasar a la siguiente canción
     @IBAction func forwardControl(_ sender: UIButton) {
-        nextSound()
+        nextOrBackSound(1)
     }
     
     //  Acción para poner la lista a reproducir en modo shuffle
@@ -227,7 +230,6 @@ class ViewController: UIViewController {
             randomlist.removeAll()
             generateRandom()
             soundLoaded = randomlist[0]
-            randomlist.remove(at: 0)
             if !player.isPlaying {
                 initPlayer()
                 playPause(true)
@@ -237,6 +239,7 @@ class ViewController: UIViewController {
             shuffleControl.tintColor = .gray
             
         }
+        
     }
     
     //  Acción del botón para repetir canción
@@ -244,10 +247,64 @@ class ViewController: UIViewController {
         repeatSong.toggle()
         if repeatSong {
             repeatControl.tintColor = .green
+            repeatControl.setImage(UIImage(systemName: "repeat.1"), for: .normal)
         } else {
             repeatControl.tintColor = .gray
+            repeatControl.setImage(UIImage(systemName: "repeat"), for: .normal)
         }
         
+    }
+    
+    //Funciones para resolver la tabla
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+        
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return !shuffleSong ? playList.count : randomlist.count
+        
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: MyTableViewCell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath) as! MyTableViewCell
+
+        var title: String = ""
+        var artist: String = ""
+        var color: UIColor = UIColor.white
+        var hidden: Bool = true
+        var image: UIImage = UIImage()
+//        if shuffleSong {
+//            title = playList[randomlist[indexPath.row]].title
+//            artist = playList[randomlist[indexPath.row]].artist
+//            hidden =  soundLoaded == randomlist[indexPath.row] ? false : true
+//            color = soundLoaded == randomlist[indexPath.row] ? .green : .white
+//        } else {
+            title = playList[indexPath.row].title
+            artist = playList[indexPath.row].artist
+            hidden = soundLoaded == indexPath.row ? false : true
+            color = soundLoaded == indexPath.row ? .green : .white
+        image = playList[indexPath.row].image
+        //}
+        //speaker.wave.2
+        cell.titleCell.text = " \(title)"
+        cell.authorCell.text = "   - \(artist)"
+        cell.iconSound.isHidden = hidden
+        cell.titleCell.textColor = color
+        cell.imageSound.image = image
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Celda \(indexPath.row) seleccionada")
+        soundLoaded = indexPath.row
+        initPlayer()
+        playPause(true)
+    }
+    
+    func callPressed(name: String) {
+        print("Algo")
     }
     
     //  Carga de canciones de la app

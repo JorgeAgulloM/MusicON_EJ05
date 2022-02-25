@@ -24,6 +24,7 @@
 		11A5CAB427C3A75700FF753F /* Sandstorm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11A5CAAA27C3A75700FF753F /* Sandstorm.mp3 */; };
 		11A5CAB527C3A75700FF753F /* ShootToThrill.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11A5CAAB27C3A75700FF753F /* ShootToThrill.mp3 */; };
 		11A5CAB627C3A75700FF753F /* Song2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11A5CAAC27C3A75700FF753F /* Song2.mp3 */; };
+		11DB978E27C830E4004C61F1 /* MyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DB978D27C830E4004C61F1 /* MyTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		11A5CAAA27C3A75700FF753F /* Sandstorm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sandstorm.mp3; sourceTree = "<group>"; };
 		11A5CAAB27C3A75700FF753F /* ShootToThrill.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = ShootToThrill.mp3; path = ../../../Music/Music/Media.localized/Music/Compilations/MusicON/ShootToThrill.mp3; sourceTree = "<group>"; };
 		11A5CAAC27C3A75700FF753F /* Song2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Song2.mp3; sourceTree = "<group>"; };
+		11DB978D27C830E4004C61F1 /* MyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				11573C5527C2CBC90009DA6A /* SceneDelegate.swift */,
 				11573C5727C2CBC90009DA6A /* ViewController.swift */,
 				11573C7327C2D10E0009DA6A /* SoundTrack.swift */,
+				11DB978D27C830E4004C61F1 /* MyTableViewCell.swift */,
 				11573C5927C2CBC90009DA6A /* Main.storyboard */,
 				11573C5C27C2CBCD0009DA6A /* Assets.xcassets */,
 				11573C5E27C2CBCD0009DA6A /* LaunchScreen.storyboard */,
@@ -184,6 +187,7 @@
 				11573C5827C2CBC90009DA6A /* ViewController.swift in Sources */,
 				11573C7427C2D10E0009DA6A /* SoundTrack.swift in Sources */,
 				11573C5427C2CBC90009DA6A /* AppDelegate.swift in Sources */,
+				11DB978E27C830E4004C61F1 /* MyTableViewCell.swift in Sources */,
 				11573C5627C2CBC90009DA6A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
